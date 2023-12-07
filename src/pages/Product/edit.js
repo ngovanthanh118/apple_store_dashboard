@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
+import { toast } from "react-toastify";
 
 export default function EditProductPage() {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [product, setProduct] = useState({});
     const [name, setName] = useState('');
     const [storage, setStorage] = useState('');
@@ -13,8 +13,8 @@ export default function EditProductPage() {
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [image, setImage] = useState('');
-    useEffect(() => {
-        axios.get('/products/' + id, {
+    const loadProduct = () => {
+        axios.get('/products/edit/' + id, {
             withCredentials: true,
         })
             .then(res => {
@@ -28,6 +28,9 @@ export default function EditProductPage() {
                 setPrice(product.price);
             })
             .catch(err => console.log(err))
+    }
+    useEffect(() => {
+        loadProduct();
     }, [id])
     const handleUpdateProduct = (ev) => {
         ev.preventDefault();
@@ -44,13 +47,24 @@ export default function EditProductPage() {
         axios.put('/products/' + id, formData, {
             withCredentials: true
         })
-            .then(res => navigate('/product'))
-            .catch(err => console.log(err))
+            .then(res => {
+                loadProduct();
+                toast.success(res.data.msg);
+            })
+            .catch(err => toast.error("Update product failured!"))
     }
     return (
         <div className="p-4 ">
             <form className="flex flex-col gap-2" onSubmit={handleUpdateProduct}>
-                <h1 className="text-sky-800 text-xl font-semibold mb-2">Edit {product.name}</h1>
+                <div className="flex items-center gap-2 text-sky-800 text-xl font-semibold mb-2">
+                    <Link to="/product">
+                        Product
+                    </Link>
+                    <span>/</span>
+                    <div>
+                        Edit {product.name}
+                    </div>
+                </div>
                 <div className="flex gap-4">
                     <h1 className="text-sm font-medium w-24">Name</h1>
                     <input
@@ -62,12 +76,40 @@ export default function EditProductPage() {
                 </div>
                 <div className="flex gap-4 ">
                     <h1 className="text-sm font-medium w-24">Storage</h1>
-                    <input
-                        className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-1/4"
-                        type="text"
-                        value={storage}
-                        onChange={(ev) => setStorage(ev.target.value)}
-                    />
+                    <div className="flex gap-2">
+                        <div className="flex items-center gap-2">
+                            <input
+                                className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-1/4"
+                                type="radio" name="storage" value="128GB" checked={storage === "128GB"}
+                                onChange={ev => setStorage(ev.target.value)}
+                            />
+                            <h1>128GB</h1>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input
+                                className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-1/4"
+                                type="radio" name="storage" value="256GB" checked={storage === "256GB"}
+                                onChange={ev => setStorage(ev.target.value)}
+                            />
+                            <h1>256GB</h1>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input
+                                className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-1/4"
+                                type="radio" name="storage" value="512GB" checked={storage === "512GB"}
+                                onChange={ev => setStorage(ev.target.value)}
+                            />
+                            <h1>512GB</h1>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input
+                                className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-1/4"
+                                type="radio" name="storage" value="1TB" checked={storage === "1TB"}
+                                onChange={ev => setStorage(ev.target.value)}
+                            />
+                            <h1>1TB</h1>
+                        </div>
+                    </div>
                 </div>
                 <div className="flex gap-4 ">
                     <h1 className="text-sm font-medium w-24">Color</h1>
@@ -80,12 +122,11 @@ export default function EditProductPage() {
                 </div>
                 <div className="flex gap-4 ">
                     <h1 className="text-sm font-medium w-24">Type</h1>
-                    <input
-                        className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-1/4"
-                        type="text"
-                        value={type}
-                        onChange={(ev) => setType(ev.target.value)}
-                    />
+                    <select onChange={(ev => setType(ev.target.value))}>
+                        <option selected={type === "mobile"} value="mobile">iPhone</option>
+                        <option selected={type === "ipad"} value="ipad">iPad</option>
+                        <option selected={type === "mac"} value="mac">Mac</option>
+                    </select>
                 </div>
                 <div className="flex gap-4">
                     <h1 className="text-sm font-medium w-24">Description</h1>
@@ -118,11 +159,11 @@ export default function EditProductPage() {
                     />
                 </div>
                 <div>
-                    <img src={image.name || "http://localhost:4000/api/v1/images/" + product.image} alt="" width="200px" />
+                    <img src={"http://localhost:4000/api/v1/images/" + product.image} alt="" width="200px" />
                 </div>
                 <div>
                     <button className="bg-sky-800 text-white px-4 py-2 rounded-2xl">
-                        Update
+                        Save Changes
                     </button>
                 </div>
             </form>

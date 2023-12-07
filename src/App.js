@@ -8,14 +8,17 @@ import EditProductPage from "./pages/Product/edit";
 import EditAccountPage from "./pages/Account/edit";
 import AddProductPage from "./pages/Product/add";
 import AccountPage from "./pages/Account";
+import OrderPage from "./pages/Order";
+import CommentPage from "./pages/Comment";
+import SettingPage from "./pages/Setting";
 function App() {
   return (
     <div className="w-full h-screen bg-sky-800">
       <BrowserRouter>
         <Routes>
           <Route index element={<LoginPage />} />
-          <Route path="/" element={<Layout/>} >
-            <Route path="/dashboard" element={<HomePage/>} />
+          <Route path="/" element={<Layout />} >
+            <Route path="/dashboard" element={<HomePage />} />
             {/* Product router */}
             <Route path="/product" element={<ProductPage />} />
             <Route path="/product/edit/:id" element={<EditProductPage />} />
@@ -23,10 +26,12 @@ function App() {
             {/* Account router */}
             <Route path="/account" element={<AccountPage />} />
             <Route path="/account/edit/:id" element={<EditAccountPage />} />
-
-            <Route path="/order" element={<HomePage />} />
-            <Route path="/comment" element={<HomePage />} />
-            <Route path="/setting" element={<HomePage />} />
+            {/* Order router */}
+            <Route path="/order" element={<OrderPage />} />
+            {/* Comment router */}
+            <Route path="/comment" element={<CommentPage />} />
+            {/* Setting router */}
+            <Route path="/setting" element={<SettingPage />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Routes>

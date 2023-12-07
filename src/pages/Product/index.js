@@ -1,31 +1,61 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function ProductPage() {
     const [products, setProducts] = useState([]);
-    const loadProducts = () => {
-        axios.get('/products')
-            .then(res => setProducts(res.data.data))
-            .catch(err => console.log(err))
-    }
-    useEffect(() => {
-        loadProducts();
-    }, [])
+    const [total, setTotal] = useState('');
+    const [pageSize, setPageSize] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
     const handleDeleteProduct = (id) => {
         const isConfirm = window.confirm("Do you want to delete this product?");
         if (isConfirm) {
             axios.delete('/products/' + id, {
                 withCredentials: true,
             })
-                .then(res => loadProducts())
-                .catch(err => console.log(err))
+                .then(res => {
+                    if (products.length < 2) {
+                        setCurrentPage(currentPage - 1);
+                    }
+                    else {
+                        getPage(currentPage);
+                    }
+                    toast.success(res.data.msg)
+                })
+                .catch(err => toast.error("Delete product failured!"))
         }
     }
+
+    const getPage = (page) => {
+        if (page < 1 || page > countPage().length) {
+            page = 1;
+        }
+        axios.get('/products?page=' + page, {
+            withCredentials: true
+        })
+            .then(res => {
+                setProducts(res.data.data);
+                setTotal(res.data.totalDoc);
+                setPageSize(res.data.pageSize);
+            })
+            .catch(err => console.log(err))
+    }
+    const countPage = () => {
+        const count = Math.ceil(total / pageSize);
+        const result = [];
+        for (let i = 1; i <= count; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+    useEffect(() => {
+        getPage(currentPage);
+    }, [currentPage])
     return (
-        <div className="p-4">
+        <div className="p-4 relative h-full">
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-medium text-sky-700 my-4">Products</h1>
+                <h1 className="text-2xl font-semibold text-sky-700 my-4">Products</h1>
                 <Link className="flex gap-2 font-medium text-sky-600 " to="/product/add">
                     <span>Add</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -61,6 +91,40 @@ export default function ProductPage() {
                     </div>
                 </div>
             ))}
+            <div className="flex justify-center items-center gap-4 p-2 text-sky-800 absolute bottom-0 left-0 right-0">
+                <button onClick={() => setCurrentPage(prev => {
+                    if (prev <= 1) {
+                        return prev;
+                    }
+                    else {
+                        return prev - 1;
+                    }
+                })}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
+                    </svg>
+                </button>
+                {countPage().slice(currentPage - 1, currentPage + 2).map(page => (
+                    <div key={page} className={currentPage === page ?
+                        "bg-gray-400 p-2 rounded-xl text-black font-semibold text-xl cursor-pointer" :
+                        "font-semibold p-2 text-xl cursor-pointer"}
+                        onClick={() => setCurrentPage(page)}>
+                        {page}
+                    </div>
+                ))}
+                <button onClick={() => setCurrentPage(prev => {
+                    if (prev >= countPage().length) {
+                        return prev;
+                    }
+                    else {
+                        return prev + 1;
+                    }
+                })}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                    </svg>
+                </button>
+            </div>
         </div>
     )
 }
