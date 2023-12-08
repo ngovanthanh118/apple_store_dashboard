@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { setCookie } from "../../utils";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ export default function LoginPage() {
         })
             .then(data => {
                 if (data.data.admin) {
+                    setCookie("token", res.data.token);
                     navigate("/dashboard");
                 }
                 else
