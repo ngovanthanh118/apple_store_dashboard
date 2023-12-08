@@ -16,7 +16,7 @@ export default function LoginPage() {
         })
             .then(data => {
                 if (data.data.admin) {
-                    setCookie("token", res.data.token);
+                    setCookie("token", data.data.token);
                     navigate("/dashboard");
                 }
                 else
