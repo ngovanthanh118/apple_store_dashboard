@@ -147,7 +147,7 @@ export default function EditProductPage() {
                             <p>No image</p>
                         </div>
                         :
-                        <img src={"http://localhost:4000/api/v1/images/" + account.image} alt="avatar" width="120px" height="120px" />}
+                        <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + account.image} alt="avatar" width="120px" height="120px" />}
                 </div>
                 <div className="flex gap-4">
                     <h1 className="text-sm font-medium w-24">Admin</h1>

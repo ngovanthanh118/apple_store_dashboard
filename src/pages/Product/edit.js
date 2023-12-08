@@ -193,7 +193,7 @@ export default function EditProductPage() {
                 </div>
                 <div className="flex gap-4">
                     <h1 className="text-sm font-medium w-24">Image</h1>
-                    <img src={"http://localhost:4000/api/v1/images/" + product.image} alt="avatar" width="120px" height="200px" />
+                    <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + product.image} alt="avatar" width="120px" height="200px" />
                 </div>
                 <div>
                     <button className="bg-sky-800 text-white px-4 py-2 rounded-2xl">

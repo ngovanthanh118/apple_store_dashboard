@@ -136,7 +136,7 @@ export default function SettingPage() {
                             <p>No image</p>
                         </div>
                         :
-                        <img src={"http://localhost:4000/api/v1/images/" + admin.image} alt="avatar" width="120px" height="120px" />
+                        <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + admin.image} alt="avatar" width="120px" height="120px" />
                     }
                 </div>
                 <div>
