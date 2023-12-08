@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState } from "react";
-import { setCookie } from "../../utils";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
@@ -16,7 +15,6 @@ export default function LoginPage() {
         })
             .then(data => {
                 if (data.data.admin) {
-                    setCookie("token", data.data.token, 1);
                     navigate("/dashboard");
                 }
                 else
