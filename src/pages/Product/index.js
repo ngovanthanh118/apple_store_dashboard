@@ -8,6 +8,9 @@ export default function ProductPage() {
     const [total, setTotal] = useState('');
     const [pageSize, setPageSize] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    useEffect(() => {
+        getPage(currentPage);
+    }, [currentPage])
     const handleDeleteProduct = (id) => {
         const isConfirm = window.confirm("Do you want to delete this product?");
         if (isConfirm) {
@@ -49,9 +52,7 @@ export default function ProductPage() {
         }
         return result;
     }
-    useEffect(() => {
-        getPage(currentPage);
-    }, [currentPage])
+
     return (
         <div className="p-4 relative h-full">
             <div className="flex justify-between items-center">

@@ -19,6 +19,7 @@ export default function AddProductPage() {
         formData.append('storage', storage);
         formData.append('color', color);
         formData.append('type', type);
+        formData.append('status', status);
         formData.append('description', description);
         formData.append('price', price);
         formData.append('image', image);
