@@ -1,8 +1,8 @@
 export const setCookie = (cname, cvalue, exdays) => {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/; secure=true";
+    let expires = "Expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";Path=/; Secure";
 }
 export const getCookie = (cname) => {
     let name = cname + "=";
@@ -20,5 +20,5 @@ export const getCookie = (cname) => {
     return "";
 }
 export const removeCookie = (cname) => {
-    document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = cname + "=; Expires=Thu, 01 Jan 1970 00:00:00 UTC; Path=/;";
 }
