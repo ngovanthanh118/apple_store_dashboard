@@ -27,7 +27,7 @@ export default function LoginPage() {
     return (
         <div className="h-full flex justify-center flex-col items-center">
             <h1 className="my-3 text-white text-4xl text-center font-bold">Dashboard</h1>
-            <form className="bg-white rounded-2xl w-1/3 px-8 py-6 flex flex-col gap-4" onSubmit={handleLogin}>
+            <form className="mobile-form-login bg-white rounded-2xl w-1/3 px-8 py-6 flex flex-col gap-4" onSubmit={handleLogin}>
                 <div >
                     <input
                         className="bg-slate-200 p-3 w-full rounded-3xl"

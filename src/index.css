@@ -1,12 +1,60 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-*{
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-html{
+
+html {
   font-family: 'Roboto', sans-serif;
 }
 
+/* reponsive mobile */
+@media screen and (max-width: 767px) {
+  button.mobile-nav-btn {
+    display: block;
+
+  }
+
+  div.mobile-nav-link {
+    display: none;
+  }
+
+  div.mobile-nav-link.active {
+    display: block;
+  }
+  div.mobile-panel {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+    background-color: rgb(7, 89, 133);
+  }
+
+  div.mobile-out-let {
+    margin-left: 24px;
+    padding-top: 20px;
+  }
+  input,
+  textarea {
+    flex: 0.9;
+  }
+  form.mobile-form-login{
+    width: 95%;
+  }
+}
+
+/* reonsive tablet */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  input,
+  textarea {
+    flex: 0.6;
+  }
+  form.mobile-form-login{
+    width: 60%;
+  }
+}

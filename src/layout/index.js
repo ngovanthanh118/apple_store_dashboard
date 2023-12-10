@@ -4,10 +4,10 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export default function Layout() {
     return (
-        <div className="flex w-full h-screen pb-12 ">
+        <div className="flex w-full h-screen pb-12">
             <ToastContainer/>
             <Panel />
-            <div className="bg-white h-full mt-6 mr-6  w-full rounded-xl ">
+            <div className="mobile-out-let bg-white h-full mr-6 mt-6 w-full rounded-xl">
                 <Outlet />
             </div>
         </div>
