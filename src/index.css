@@ -43,8 +43,8 @@ html {
   textarea {
     flex: 0.9;
   }
-  form.mobile-form-login{
-    width: 95%;
+  div.mobile-form-login{
+    width: 90%;
   }
 }
 
@@ -54,7 +54,7 @@ html {
   textarea {
     flex: 0.6;
   }
-  form.mobile-form-login{
+  div.mobile-form-login{
     width: 60%;
   }
 }
