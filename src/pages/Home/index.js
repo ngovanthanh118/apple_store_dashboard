@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getCookie } from "../../utils";
 
 export default function HomePage() {
     const [admin, setAdmin] = useState({});
     const navigate = useNavigate();
     useEffect(() => {
         axios.get('/users', {
-            withCredentials: true
+            headers: {
+                token: getCookie('token')
+            }
         })
             .then(res => setAdmin(res.data.data))
             .catch(err => console.log(err))
