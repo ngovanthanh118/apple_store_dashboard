@@ -10,7 +10,7 @@ export default function AccountImage({title, image}) {
                     <p>No image</p>
                 </div>
                 :
-                <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + image} alt="avatar" width="120px" height="120px" />}
+                <img src={"https://apple-store-server.vercel.app/api/v1/images/" + image} alt="avatar" width="120px" height="120px" />}
         </div>
     )
 }

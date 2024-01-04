@@ -91,7 +91,7 @@ export default function ProductPage() {
                         {products.length > 0 && products.map((product) => (
                             <div className="flex items-center justify-between px-4 border-b-2" key={product._id}>
                                 <p>{product.name}</p>
-                                <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + product.image} width="150px" height="150px" alt="" />
+                                <img src={"https://apple-store-server.vercel.app/api/v1/images/" + product.image} width="150px" height="150px" alt="" />
                                 <div className="flex gap-4">
                                     <Link className="bg-gray-200 text-sky-900 p-1 rounded-xl outline outline-2" to={"/product/edit/" + product._id}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
