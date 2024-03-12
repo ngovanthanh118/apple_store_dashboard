@@ -62,6 +62,11 @@ export default function LoginPage() {
                                 <button className="bg-sky-800 w-full rounded-2xl py-3 text-white text-xl font-bold">Login</button>
                             </div>
                         </form>
+                        <div className="p-3 text-white">
+                            <p className="text-center text-yellow-300">You can use this account admin to login into website. Please, don't destroy it!</p>
+                            <p>Email: admin@gmail.com</p>
+                            <p>Password: admin</p>
+                        </div>
                         <p className="my-4 text-white">{error}</p>
                     </div>
             }

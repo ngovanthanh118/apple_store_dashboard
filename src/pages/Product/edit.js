@@ -20,13 +20,22 @@ export default function EditProductPage() {
     const [loading, setLoading] = useState(false);
     const [product, setProduct] = useState({});
     const [name, setName] = useState('');
-    const [storage, setStorage] = useState('');
+    const [capacity, setCapacity] = useState('');
+    const [size, setSize] = useState('');
     const [color, setColor] = useState('');
     const [type, setType] = useState('');
+    const [categories, setCategories] = useState([]);
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
+    const [discount, setDiscount] = useState('');
+    const [quantity, setQuantity] = useState('');
     const [image, setImage] = useState('');
     const [status, setStatus] = useState('Old');
+    const loadCategory = () => {
+        axios.get('/categories')
+            .then(res => setCategories(res.data.data))
+            .catch(err => console.log(err));
+    }
     const loadProduct = () => {
         axios.get('/products/edit/' + id, {
             headers: {
@@ -38,30 +47,38 @@ export default function EditProductPage() {
                 const product = res.data.data;
                 setProduct(product);
                 setName(product.name);
-                setStorage(product.storage);
+                setCapacity(product.capacity);
                 setColor(product.color);
                 setType(product.type);
                 setStatus(product.status);
                 setDescription(product.description);
                 setPrice(product.price);
+                setDiscount(product.discount);
+                setSize(product.size);
+                setQuantity(product.quantity);
             })
             .catch(err => console.log(err))
     }
     useEffect(() => {
         setLoading(true);
         loadProduct();
+        loadCategory();
     }, [id])
     const handleUpdateProduct = (ev) => {
         setLoading(true);
         ev.preventDefault();
         const formData = new FormData();
         formData.append('name', name);
-        formData.append('storage', storage);
+        formData.append('capacity', capacity);
         formData.append('color', color);
         formData.append('type', type);
         formData.append('status', status);
         formData.append('description', description);
         formData.append('price', price);
+        formData.append('discount', discount);
+        formData.append('size', size);
+        formData.append('quantity', quantity);
+
         if (image) {
             formData.append('image', image);
         }
@@ -76,6 +93,7 @@ export default function EditProductPage() {
             })
             .catch(err => toast.error("Update product failured!"))
     }
+    
     return (
         <div className="flex justify-center items-center h-full relative">
             {loading ?
@@ -97,21 +115,26 @@ export default function EditProductPage() {
                             onChange={ev => setName(ev.target.value)}
                         />
                         <RadioInput
-                            title="Storage"
-                            checked={storage}
+                            title="Capacity"
+                            checked={capacity}
                             values={["128GB", "256GB", "512GB", "1TB"]}
-                            onChange={ev => setStorage(ev.target.value)}
+                            onChange={ev => setCapacity(ev.target.value)}
                         />
                         <TextInput
                             title="Color"
                             value={color}
                             onChange={ev => setColor(ev.target.value)}
                         />
+                        <RadioInput
+                            title="Screen size"
+                            checked={size}
+                            values={['5.8"', '6.1"', '6.7"']}
+                            onChange={ev => setSize(ev.target.value)}
+                        />
                         <SelectInput
                             title="Type"
-                            options={["iPhone", "iPad", "Mac"]}
-                            values={["mobile", "ipad", "mac"]}
-                            select={type}
+                            options={categories}
+                            selected={type}
                             onChange={ev => setType(ev.target.value)}
                         />
                         <RadioInput
@@ -129,6 +152,16 @@ export default function EditProductPage() {
                             title="Price"
                             value={price}
                             onChange={ev => setPrice(ev.target.value)}
+                        />
+                        <TextInput
+                            title="Discount"
+                            value={discount}
+                            onChange={ev => setDiscount(ev.target.value)}
+                        />
+                        <TextInput
+                            title="Quantity"
+                            value={quantity}
+                            onChange={ev => setQuantity(ev.target.value)}
                         />
                         <ImageInput
                             title="Update image"

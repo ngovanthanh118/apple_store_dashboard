@@ -11,6 +11,9 @@ import AccountPage from "./pages/Account";
 import OrderPage from "./pages/Order";
 import CommentPage from "./pages/Comment";
 import SettingPage from "./pages/Setting";
+import CategoryPage from "./pages/Category";
+import AddCategoryPage from "./pages/Category/add";
+import EditCategoryPage from "./pages/Category/edit";
 function App() {
   return (
     <div className="w-full h-screen bg-sky-800">
@@ -23,6 +26,11 @@ function App() {
             <Route path="/product" element={<ProductPage />} />
             <Route path="/product/edit/:id" element={<EditProductPage />} />
             <Route path="/product/add" element={<AddProductPage />} />
+            {/* Category router */}
+            <Route path="/category" element={<CategoryPage/>}/>
+            <Route path="/category/add" element={<AddCategoryPage/>}/>
+            <Route path="/category/edit/:id" element={<EditCategoryPage/>}/>
+
             {/* Account router */}
             <Route path="/account" element={<AccountPage />} />
             <Route path="/account/edit/:id" element={<EditAccountPage />} />
