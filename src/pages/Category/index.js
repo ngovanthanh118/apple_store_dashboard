@@ -16,7 +16,7 @@ export default function CategoryPage() {
         getPage(currentPage);
     }, [currentPage])
     const handleDeleteProduct = (id) => {
-        const isConfirm = window.confirm("Do you want to delete this category?");
+        const isConfirm = window.confirm("Bạn muốn xóa danh mục này không?");
         if (isConfirm) {
             axios.delete('/categories/' + id, {
                 headers: {
@@ -30,9 +30,9 @@ export default function CategoryPage() {
                     else {
                         getPage(currentPage);
                     }
-                    toast.success(res.data.msg)
+                    toast.success('Xóa danh mục thành công')
                 })
-                .catch(err => toast.error("Delete category failured!"))
+                .catch(err => toast.error("Xóa danh mục thất bại"))
         }
     }
 
@@ -40,8 +40,11 @@ export default function CategoryPage() {
         if (page < 1 || page > countPage().length) {
             page = 1;
         }
-        axios.get('/categories?page=' + page, {
-            withCredentials: true
+        axios.get('/categories/list?page=' + page, {
+            headers: {
+                token: getCookie('token')
+            }
+
         })
             .then(res => {
                 setLoading(false);
@@ -70,27 +73,27 @@ export default function CategoryPage() {
                     /> :
                     <div className="w-full p-4 h-full absolute top-0 left-0">
                         <div className="flex justify-between items-center">
-                            <h1 className="text-2xl font-semibold text-sky-700 my-4">Categories</h1>
+                            <h1 className="text-2xl font-semibold text-sky-700 my-4">Danh mục</h1>
                             <Link className="flex gap-2 font-medium text-sky-600 " to="/category/add">
-                                <span>Add</span>
+                                <span>Thêm</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                 </svg>
                             </Link>
                         </div>
                         {!categories.length && (
-                            <h1 className="px-2 py-1">Don't have category</h1>
+                            <h1 className="px-2 py-1">Không tồn tại danh mục nào</h1>
                         )}
                         {categories.length > 0 && (
-                            <div className="flex justify-between px-6 bg-gray-400 text-black font-semibold rounded-sm">
-                                <h1>Name</h1>
-                                <h1>Action</h1>
+                            <div className="flex justify-between items-center px-4 py-1 bg-gray-400 text-black font-semibold rounded-sm">
+                                <h1>Tên danh mục</h1>
+                                <h1>Hành động</h1>
                             </div>
                         )}
                         {categories.length > 0 && categories.map((category) => (
                             <div className="flex items-center justify-between px-4 border-b-2" key={category._id}>
                                 <p>{category.name}</p>
-                                <div className="flex gap-4 p-3">
+                                <div className="flex gap-4 py-2">
                                     <Link className="bg-gray-200 text-sky-900 p-1 rounded-xl outline outline-2" to={"/category/edit/" + category._id}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
@@ -119,8 +122,8 @@ export default function CategoryPage() {
                             </button>
                             {countPage().slice(currentPage - 1, currentPage + 2).map(page => (
                                 <div key={page} className={currentPage === page ?
-                                    "bg-gray-400 p-2 rounded-xl text-black font-semibold text-xl cursor-pointer" :
-                                    "font-semibold p-2 text-xl cursor-pointer"}
+                                    "bg-gray-300 px-2 rounded-xl text-black font-semibold text-base cursor-pointer" :
+                                    "font-semibold px-2 text-base cursor-pointer"}
                                     onClick={() => setCurrentPage(page)}>
                                     {page}
                                 </div>

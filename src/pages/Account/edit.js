@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useForm } from 'react-hook-form'
+import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify";
 import TextInput from "../../components/TextInput";
 import ImageInput from "../../components/ImageInput";
@@ -14,16 +15,11 @@ import { BarLoader } from "react-spinners";
 
 export default function EditProductPage() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [account, setAccount] = useState({})
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [image, setImage] = useState('');
-    const [admin, setAdmin] = useState(false);
-    const [phone, setPhone] = useState('');
-    const [address, setAddress] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [account, setAccount] = useState('')
+    const { register, reset } = useForm();
     const loadAccount = () => {
         axios.get('/users/' + id, {
             headers: {
@@ -33,13 +29,8 @@ export default function EditProductPage() {
             .then(res => {
                 setLoading(false);
                 const account = res.data.data;
-                setAccount(account);
-                setName(account.name);
-                setEmail(account.email);
-                setPassword(account.password);
-                setPhone(account.phone);
-                setAddress(account.address);
-                setAdmin(account.admin);
+                setAccount(prev => prev = account);
+                reset(account);
             })
             .catch(err => console.log(err))
     }
@@ -50,27 +41,17 @@ export default function EditProductPage() {
     const handleUpdateAccount = (ev) => {
         setLoading(true);
         ev.preventDefault();
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('password', newPassword);
-        formData.append('phone', phone);
-        formData.append('address', address);
-        formData.append('admin', admin);
-        if (image) {
-            formData.append('image', image);
-        }
-        axios.put('/users/' + id, formData, {
+        axios.put('/users/' + id + '/permission', {
             headers: {
                 token: getCookie('token')
             }
         })
             .then(res => {
                 loadAccount();
-                toast.success(res.data.msg);
-                setNewPassword('');
+                toast.success('Cập nhật tài khoản thành công');
+                navigate('/account')
             })
-            .catch(err => toast.error("Update account failured!"))
+            .catch(err => toast.error("Cập nhật tài khoản thất bại"))
     }
     return (
         <div className="flex justify-center items-center h-full relative">
@@ -84,56 +65,35 @@ export default function EditProductPage() {
                     <div className="p-4 absolute top-0 left-0 w-full h-full">
                         <FormControl onSubmit={handleUpdateAccount}>
                             <Thumbnail
-                                title="Account"
+                                title="Tài khoản"
                                 goBack="/account"
-                                action={`Edit ${account.name}`}
+                                action={`Chỉnh sửa ${account.name}`}
                             />
-                            <TextInput
-                                title="Name"
-                                value={name}
-                                onChange={ev => setName(ev.target.value)}
-                            />
-                            <TextInput
-                                title="Email"
-                                type="email"
-                                value={email}
-                                onChange={ev => setEmail(ev.target.value)}
-                            />
-                            <TextInput
-                                title="Phone"
-                                value={phone}
-                                onChange={ev => setPhone(ev.target.value)}
-                            />
-                            <TextInput
-                                title="Address"
-                                value={address}
-                                onChange={ev => setAddress(ev.target.value)}
-                            />
-                            <TextInput
-                                title="Password"
-                                type="password"
-                                value={password}
-                                disabled />
-                            <TextInput
-                                title="New Password"
-                                type="password"
-                                value={newPassword}
-                                onChange={(ev) => setNewPassword(ev.target.value)}
-                            />
-                            <ImageInput
-                                title="Update avatar"
-                                onChange={ev => setImage(ev.target.files[0])}
-                            />
+                            <div className="flex items-center gap-3">
+                                <label className="text-sm font-medium w-24" htmlFor="name">Tên</label>
+                                <input disabled className="bg-gray-100 cursor-not-allowed text-sm rounded-xl px-2 py-1 w-1/3" type="text" id="name" {...register('name')} />
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <label className="text-sm font-medium w-24" htmlFor="email">Email</label>
+                                <input disabled className="bg-gray-100 cursor-not-allowed text-sm rounded-xl px-2 py-1 w-1/3" type="text" id="email" {...register('email')} />
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <label className="text-sm font-medium w-24" htmlFor="phone">Số điện thoại</label>
+                                <input disabled className="bg-gray-100 cursor-not-allowed text-sm rounded-xl px-2 py-1 w-1/3" type="text" id="phone" {...register('phone')} />
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <label className="text-sm font-medium w-24" htmlFor="address">Địa chỉ</label>
+                                <input disabled className="bg-gray-100 cursor-not-allowed text-sm rounded-xl px-2 py-1 w-1/3" type="text" id="address" {...register('address')} />
+                            </div>
                             <AccountImage
                                 title="Avatar"
                                 image={account.image}
                             />
-                            <CheckboxInput
-                                title="Admin"
-                                checked={admin}
-                                onChange={() => setAdmin(!admin)}
-                            />
-                            <ButtonAction>Save Changes</ButtonAction>
+                            <div className="flex items-center gap-3">
+                                <label className="text-sm font-medium w-24" htmlFor="admin">Admin</label>
+                                <input className="bg-gray-200 text-sm rounded-xl px-2 py-1 cursor-pointer" type="checkbox" id="admin" checked={isAdmin} onChange={() => setIsAdmin(!isAdmin)} />
+                            </div>
+                            <ButtonAction>Lưu thay đổi</ButtonAction>
                         </FormControl>
                     </div>
             }

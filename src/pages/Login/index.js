@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { setCookie } from "../../utils";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
     const [loading, setLoading] = useState(false);
@@ -18,13 +19,19 @@ export default function LoginPage() {
             password: password
         })
             .then(data => {
+                if (data.data.error) {
+                    setError(data.data.msg);
+                    setLoading(false);
+                    return;
+                }
                 if (data.data.admin) {
                     setCookie("token", data.data.token, 1);
                     setLoading(false);
                     navigate("/dashboard");
                 }
-                else
-                    setError('Account does not admin')
+                else {
+                    setError('Truy cập không hợp lệ')
+                }
             })
             .catch(err => setError('Account or password is incorrect'))
     }
@@ -62,11 +69,6 @@ export default function LoginPage() {
                                 <button className="bg-sky-800 w-full rounded-2xl py-3 text-white text-xl font-bold">Login</button>
                             </div>
                         </form>
-                        <div className="p-3 text-white">
-                            <p className="text-center text-yellow-300">You can use this account admin to login into website. Please, don't destroy it!</p>
-                            <p>Email: admin@gmail.com</p>
-                            <p>Password: admin</p>
-                        </div>
                         <p className="my-4 text-white">{error}</p>
                     </div>
             }

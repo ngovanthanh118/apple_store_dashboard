@@ -14,6 +14,11 @@ import SettingPage from "./pages/Setting";
 import CategoryPage from "./pages/Category";
 import AddCategoryPage from "./pages/Category/add";
 import EditCategoryPage from "./pages/Category/edit";
+import OrderEdit from "./pages/Order/edit";
+import CommentDetailPage from "./pages/Comment/detail";
+import NotificationPage from "./pages/Notification";
+import NotificationAddPage from "./pages/Notification/add";
+import NotificationDetailPage from "./pages/Notification/detail";
 function App() {
   return (
     <div className="w-full h-screen bg-sky-800">
@@ -27,17 +32,24 @@ function App() {
             <Route path="/product/edit/:id" element={<EditProductPage />} />
             <Route path="/product/add" element={<AddProductPage />} />
             {/* Category router */}
-            <Route path="/category" element={<CategoryPage/>}/>
-            <Route path="/category/add" element={<AddCategoryPage/>}/>
-            <Route path="/category/edit/:id" element={<EditCategoryPage/>}/>
+            <Route path="/category" element={<CategoryPage />} />
+            <Route path="/category/add" element={<AddCategoryPage />} />
+            <Route path="/category/edit/:id" element={<EditCategoryPage />} />
 
             {/* Account router */}
             <Route path="/account" element={<AccountPage />} />
             <Route path="/account/edit/:id" element={<EditAccountPage />} />
             {/* Order router */}
             <Route path="/order" element={<OrderPage />} />
+            <Route path="/order/:id" element={<OrderEdit />} />
+
             {/* Comment router */}
             <Route path="/comment" element={<CommentPage />} />
+            <Route path="/comment/:id" element={<CommentDetailPage />} />
+            {/* Notification router */}
+            <Route path="/notification" element={<NotificationPage />} />
+            <Route path="/notification/add" element={<NotificationAddPage />} />
+            <Route path="/notification/:id" element={<NotificationDetailPage />} />
             {/* Setting router */}
             <Route path="/setting" element={<SettingPage />} />
           </Route>

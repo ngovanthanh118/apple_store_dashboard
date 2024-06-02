@@ -1,4 +1,4 @@
-export default function AccountImage({title, image}) {
+export default function AccountImage({ title, image }) {
     return (
         <div className="flex gap-4">
             <h1 className="text-sm font-medium w-24">{title}</h1>
@@ -10,7 +10,7 @@ export default function AccountImage({title, image}) {
                     <p>No image</p>
                 </div>
                 :
-                <img src={"https://apple-store-server.vercel.app/api/v1/images/" + image} alt="avatar" width="120px" height="120px" />}
+                <img src={`${process.env.REACT_APP_API_URL}/images/${image}`} alt="avatar" width="120px" height="120px" />}
         </div>
     )
 }
