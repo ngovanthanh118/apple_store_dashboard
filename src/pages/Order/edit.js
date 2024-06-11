@@ -16,7 +16,7 @@ export default function OrderEdit() {
         setLoading(true);
         axios.get('/orders/' + id + '/detail')
             .then(res => {
-                console.log(res);
+
                 setLoading(false);
                 const order = res.data.data;
                 setStatus(prev => prev = order.status)
@@ -70,9 +70,12 @@ export default function OrderEdit() {
                     <div>
                         <h1 className="text-base font-medium">Thông tin đơn hàng</h1>
                         {order.products?.length > 0 && order.products.map((product => (
-                            <div key={product._id} className="flex items-center gap-4 py-2">
+                            <div key={product._id} className="flex items-start gap-4 py-2">
                                 <img src={`${process.env.REACT_APP_API_URL}/images/${product.image}`} alt="Ảnh" className="w-16 h-16" />
-                                <h1>{product.name} {product.capacity} x {product.quantity}</h1>
+                                <div>
+                                    <h1>{product.name} {product.capacity} x {product.quantity}</h1>
+                                    <h1>{product.color}</h1>
+                                </div>
                                 <p>{product.price?.toLocaleString()}đ</p>
                             </div>
                         )))}
@@ -99,8 +102,13 @@ export default function OrderEdit() {
                     <div className="flex gap-4">
                         <button className="bg-sky-800 text-white px-4 py-2 rounded-2xl max-w-fit" onClick={handleUpdateStatusOrder}>Lưu thay đổi</button>
 
-                        <PDFDownloadLink document={<PDFFile infor={order} />} filename="FORM">
-                            <button className="bg-sky-800 text-white px-4 py-2 rounded-2xl max-w-fit" >Xuất hóa đơn</button>
+                        <PDFDownloadLink document={<PDFFile infor={order} />} fileName="bill.pdf">
+                            {({ blob, url, loading, error }) => (loading ? (
+                                <button className="bg-sky-800 text-white px-4 py-2 rounded-2xl max-w-fit" >Đang tạo đơn...</button>
+                            ) : (
+                                <button className="bg-sky-800 text-white px-4 py-2 rounded-2xl max-w-fit" >Xuất hóa đơn</button>
+                            ))}
+                            {/* <button className="bg-sky-800 text-white px-4 py-2 rounded-2xl max-w-fit" >Xuất hóa đơn</button> */}
                         </PDFDownloadLink>
                     </div>
                 </div>

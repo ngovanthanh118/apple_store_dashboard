@@ -46,13 +46,16 @@ export default function AddProductPage() {
         setImagesShow(prev => prev = imageUrls);
     }
     const onSubmit = (data) => {
+        console.log(data);
         const formData = new FormData();
         Object.keys(data).forEach(key => {
             formData.append(key, data[key]);
         })
-        Object.keys(images).forEach(key => {
-            formData.append('images', images[key]);
-        })
+        if (images) {
+            Object.keys(images).forEach(key => {
+                formData.append('images', images[key]);
+            })
+        }
         axios.post('/products/create', formData, {
             headers: {
                 token: getCookie('token'),
@@ -65,7 +68,15 @@ export default function AddProductPage() {
             })
             .catch(err => toast.error("Thêm sản phẩm thất bại"))
     }
-
+    const handleUpdateLabelColor = (index, value) => {
+        const newColors = colors.map((val, id) => {
+            if (index === id) {
+                return { ...val, label: value }
+            }
+            return val;
+        })
+        setColors(prev => prev = newColors);
+    }
     return (
         <div className="p-4 w-full h-full overflow-y-auto">
             <FormControl onSubmit={handleSubmit(onSubmit)}>
@@ -80,14 +91,16 @@ export default function AddProductPage() {
                 <div className="flex justify-between items-start gap-4">
                     <div className="flex-1 grid grid-cols-1 gap-4">
                         <div className="flex items-center gap-3">
-                            <label className="text-sm font-medium w-24" htmlFor="name">Tên sản phẩm</label>
+                            <label className="text-sm font-medium w-24" htmlFor="name">Tên sản phẩm
+                                <span className="ml-2 text-sm text-red-600 font-medium">*</span>
+                            </label>
                             <input className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-full" type="text" id="name" {...register('name')} />
                         </div>
                         <div className="flex items-center gap-3">
                             <label className="text-sm font-medium w-24">Dung lượng</label>
                             {["64GB", "128GB", "256GB", "512GB", "1TB"].map((cap) => (
                                 <div key={cap} className="flex items-center gap-2">
-                                    <input type="radio" id={cap} value={cap} name="capacity" {...register('capacity')} />
+                                    <input type="radio" id={cap} value={cap} defaultChecked={cap === "64GB"} name="capacity" {...register('capacity')} />
                                     <label htmlFor={cap} className="text-sm font-medium">{cap}</label>
                                 </div>
                             ))}
@@ -97,13 +110,21 @@ export default function AddProductPage() {
                             <input className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-full" type="text" id="version" {...register('version')} />
                         </div>
                         <div className="flex items-start gap-3">
-                            <label className="text-sm font-medium w-24" htmlFor="colors">Màu sắc</label>
+                            <label className="text-sm font-medium w-24" htmlFor="colors">Màu sắc
+                                <span className="ml-2 text-sm text-red-600 font-medium">*</span>
+                            </label>
                             <div className="flex flex-col gap-2">
-                                <input className="w-24" type="color" id="colors" onBlur={(ev) => setColors(prev => prev = [...prev, ev.target.value])} />
+                                <input className="w-24" type="color" id="colors" onBlur={(ev) => setColors(prev => prev = [...prev, { color: ev.target.value, label: "" }])} />
                                 <div className="flex items-start gap-2">
-                                    {colors.length > 0 && colors.map(color => (
-                                        <div key={color} style={{ backgroundColor: color }} className='w-5 p-2'></div>
+                                    {colors.length > 0 && colors.map((value, index) => (
+                                        <div className="flex flex-col gap-2">
+                                            <div key={value} style={{ backgroundColor: value.color }} className='w-14 p-2'></div>
+                                            <input type="text" className="w-14 h-6 border border-solid border-gray-200 rounded-md text-xs pl-1 outline-none" spellCheck={false}
+                                                onChange={(ev) => handleUpdateLabelColor(index, ev.target.value)}
+                                            />
+                                        </div>
                                     ))}
+
                                 </div>
                             </div>
                         </div>
@@ -113,7 +134,9 @@ export default function AddProductPage() {
                             <input className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-full" type="text" id="screen_size" {...register('screen_size')} />
                         </div>
                         <div className="flex gap-4 ">
-                            <h1 className="text-sm font-medium w-24">Danh mục</h1>
+                            <h1 className="text-sm font-medium w-24">Danh mục
+                                <span className="ml-2 text-sm text-red-600 font-medium">*</span>
+                            </h1>
                             <select {...register('category_id')}>
                                 {categories.map((cate) => (
                                     <option key={cate._id} value={cate._id} >{cate.name}</option>
@@ -125,7 +148,9 @@ export default function AddProductPage() {
                             <textarea className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-full" id="description" {...register('description')} />
                         </div>
                         <div className="flex items-center gap-3">
-                            <label className="text-sm font-medium w-24" htmlFor="price">Giá gốc</label>
+                            <label className="text-sm font-medium w-24" htmlFor="price">Giá gốc
+                                <span className="ml-2 text-sm text-red-600 font-medium">*</span>
+                            </label>
                             <input className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-full" type="text" id="price" {...register('price')} />
                         </div>
                         <div className="flex items-center gap-3">
@@ -133,10 +158,18 @@ export default function AddProductPage() {
                             <input className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-full" type="text" id="discount" {...register('discount')} />
                         </div>
                         <div className="flex items-center gap-3">
-                            <label className="text-sm font-medium w-24" htmlFor="quantity">Số lượng</label>
+                            <label className="text-sm font-medium w-24" htmlFor="quantity">Số lượng
+                                <span className="ml-2 text-sm text-red-600 font-medium">*</span>
+                            </label>
                             <input className="bg-gray-200 text-sm rounded-xl px-2 py-1 w-full" type="text" id="quantity" {...register('quantity')} />
                         </div>
-
+                        <div className="flex items-center gap-3">
+                            <label className="text-sm font-medium w-24">Trạng thái</label>
+                            <div className="flex items-center gap-2">
+                                <input type="checkbox" id="status"  {...register('status')} defaultChecked />
+                                <label htmlFor="status" className="text-xs font-medium">Hiển thị</label>
+                            </div>
+                        </div>
                         <ImageInput
                             title="Hình ảnh"
                             onChange={handleChangeImageFile}
@@ -174,7 +207,7 @@ export default function AddProductPage() {
                             <label className="text-sm font-medium w-24">Ram</label>
                             {['4', '8', '16', '32', '64'].map((ram) => (
                                 <div key={ram} className="flex items-center gap-2">
-                                    <input type="radio" id={ram} value={ram} name="ram" {...register('ram')} />
+                                    <input type="radio" id={ram} value={ram} name="ram" defaultChecked={ram === "4"} {...register('ram')} />
                                     <label htmlFor={ram} className="text-sm font-medium">{ram} GB</label>
                                 </div>
                             ))}
@@ -211,7 +244,7 @@ export default function AddProductPage() {
                             <label className="text-sm font-medium w-24" htmlFor="ram">Tần số quét</label>
                             {["60", "90", "120", "144"].map((value) => (
                                 <div key={value} className="flex items-center gap-2">
-                                    <input type="radio" id={value} value={value} name="refresh_rate" {...register('refresh_rate')} />
+                                    <input type="radio" id={value} value={value} name="refresh_rate" defaultChecked={value === "60"} {...register('refresh_rate')} />
                                     <label htmlFor={value} className="text-sm font-medium">{value}Hz</label>
                                 </div>
                             ))}

@@ -116,7 +116,7 @@ export default function Panel() {
                             <span>Quản lý thông báo</span>
                         </NavLink>
                     </li>
-                    <li>
+                    {/* <li>
                         <NavLink
                             className={({ isActive }) =>
                                 isActive ? cssActive : cssNoActive
@@ -129,7 +129,7 @@ export default function Panel() {
                             </svg>
                             <span>Cài đặt</span>
                         </NavLink>
-                    </li>
+                    </li> */}
                 </ul>
 
             </div>

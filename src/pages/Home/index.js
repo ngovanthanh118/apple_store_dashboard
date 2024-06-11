@@ -11,6 +11,7 @@ export default function HomePage() {
     const [orderCate, setOrderCate] = useState([]);
     const [orderList, setOrderList] = useState([]);
     useEffect(() => {
+        setLoading(true);
         const fetchDataAnalysis = async () => {
             await axios.get('/analysis/process')
                 .then(res => {
@@ -26,6 +27,7 @@ export default function HomePage() {
                     });
                     setCategories(prev => prev = categories);
                     setOrderList(prev => prev = res.data.data.orders);
+                    setLoading(false);
                 })
                 .catch(err => console.log(err));
         }
@@ -45,12 +47,12 @@ export default function HomePage() {
                         <div className="flex flex-col gap-4">
                             <div className="flex justify-between gap-4 p-6">
                                 <div className="border bg-white p-6 border-gray-300 flex-1 border-solid rounded-md flex flex-col gap-2">
-                                    <h1 className="text-base font-medium py-2 ">Thống kê sản phẩm</h1>
-                                    <div>{data.product} sản phẩm</div>
+                                    <h1 className="text-base font-medium py-2 ">Thống kê doanh thu</h1>
+                                    <div>{data.total?.toLocaleString()}đ</div>
                                 </div>
                                 <div className="border bg-white p-6 border-gray-300 flex-1 border-solid rounded-md flex flex-col gap-2">
-                                    <h1 className="text-base font-medium py-2 ">Thống kê tài khoản</h1>
-                                    <div>{data.user} tài khoản</div>
+                                    <h1 className="text-base font-medium py-2 ">Thống kê sản phẩm</h1>
+                                    <div>{data.product} sản phẩm</div>
                                 </div>
                                 <div className="border bg-white p-6 border-gray-300 flex-1 border-solid rounded-md flex flex-col gap-2">
                                     <h1 className="text-base font-medium py-2 ">Thống kê đơn hàng</h1>
@@ -58,10 +60,10 @@ export default function HomePage() {
                                 </div>
                             </div>
                             <div className="flex p-6 justify-between">
-                                <div className="w-1/2" >
+                                <div className="flex-1" >
                                     <MyLineChart labels={categories} info={orderCate} />
                                 </div>
-                                <div className="w-1/2 " >
+                                <div className="flex-1" >
                                     <MyPieChart labels={categories} info={orderCate} />
                                 </div>
                             </div>

@@ -1,14 +1,21 @@
-import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image, Font } from '@react-pdf/renderer';
+import { removeVietnameseAccents } from '../../utils';
+Font.register({
+    family: 'Roboto',
+    src: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
+
+});
 
 const styles = StyleSheet.create({
     page: {
         flexDirection: 'row',
-        backgroundColor: '#E4E4E4',
+        backgroundColor: '#E4E4E4'
     },
     section: {
         margin: 10,
         padding: 10,
         flexGrow: 1,
+        // fontFamily: "Roboto"
     },
     header: {
         textAlign: "center",
@@ -31,20 +38,20 @@ export default function PDFFile({ infor }) {
         <Document title='Bill'>
             <Page size="A4">
                 <View style={styles.section}>
-                    <Text style={styles.header}>Thank you for order</Text>
-                    <Text style={styles.header}>Customer Info</Text>
-                    <Text>Name: {infor.customer?.name}</Text>
+                    <Text style={styles.header}>Cam on ban da dat hang</Text>
+                    <Text style={styles.header}>Thong tin nguoi dat</Text>
+                    <Text>Ho va ten: {removeVietnameseAccents(infor.customer?.name)}</Text>
                     <Text>Email: {infor.customer?.email}</Text>
-                    <Text>Phone: {infor.customer?.phone}</Text>
+                    <Text>So dien thoai: {infor.customer?.phone}</Text>
                 </View>
                 <View style={styles.section}>
-                    <Text style={styles.header}>Receiver Info</Text>
-                    <Text>Name: {infor.name}</Text>
-                    <Text>Email: {infor.email}</Text>
-                    <Text>Address: {infor.phone}</Text>
+                    <Text style={styles.header}>Thong tin nguoi nhan</Text>
+                    <Text>Ho va ten: {removeVietnameseAccents(infor.name)}</Text>
+                    <Text>So dien thoai: {infor.phone}</Text>
+                    <Text>Dia chi: {removeVietnameseAccents(infor.address)}</Text>
                 </View>
                 <View style={styles.section}>
-                    <Text style={styles.header}>Order Information</Text>
+                    <Text style={styles.header}>Thong tin don hang</Text>
                     {infor.products?.length > 0 && infor.products.map((product => (
                         <View key={product._id} style={styles.container}>
                             <Image src={`${process.env.REACT_APP_API_URL}/images/${product.image}`} style={styles.image} />
@@ -52,10 +59,10 @@ export default function PDFFile({ infor }) {
                             <Text>{product.price?.toLocaleString()}</Text>
                         </View>
                     )))}
-                    <Text >Total: {infor.total_pay?.toLocaleString()}</Text>
-                    <Text>Payment method: {infor.payment_method}</Text>
-                    <Text>Note: {infor.note}</Text>
-                    <Text>Date: {infor.createdAt}</Text>
+                    <Text>Tong tien: {infor.total_pay?.toLocaleString()}</Text>
+                    <Text>Phuong thuc thanh toan: {removeVietnameseAccents(infor.payment_method)}</Text>
+                    <Text>Ghi chu: {removeVietnameseAccents(infor.note)}</Text>
+                    <Text>Ngay dat: {infor.createdAt}</Text>
                 </View>
             </Page>
         </Document>
